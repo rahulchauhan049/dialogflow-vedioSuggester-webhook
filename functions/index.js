@@ -8,12 +8,11 @@ const { dialogflow, Image, SimpleResponse } = require('actions-on-google');
 const app = dialogflow({
     debug: true
 });
-//Handles All Meme Part
+//handle all vedio selection part....
 app.intent("suggest-vedio", conv => {
     const category = String(conv.parameters['vedioType']);
     const genre = String(conv.parameters['genre']);
 
-    //Takes Images URL from Database
     return db.ref("vedios/").once("value", snapshot => {
         const data = snapshot.val();
         const num = data[category][genre].length;
@@ -24,4 +23,3 @@ app.intent("suggest-vedio", conv => {
     });
 });
 exports.googleAction = functions.https.onRequest(app);
-//# sourceMappingURL=index.js.map
