@@ -15,25 +15,25 @@ var randomCategory = categoryList[randomNumber(categoryList)];
 var randomGenre = genreList[randomNumber(genreList)];
 //handle all vedio selection part....
 app.intent("suggest-vedio", conv => {
-    const category = String(conv.parameters['vedioType']);
-    const genre = String(conv.parameters['genre']);
+    const category = (conv.parameters['vedioType']);
+    const genre = (conv.parameters['genre']);
     return db.ref("vedios/").once("value", snapshot => {
         const data = snapshot.val();
-        if (category.length>=1 && genre.length>=1){
-        	const num = data[category][genre].length;
+        if (category.length==1 && genre.length==1){
+        	const num = data[String(category)][String(genre)].length;
         	const random = Math.floor((Math.random() * num));
-        	const toPrint = data[category][genre][random];
+        	const toPrint = data[String(category)][String(genre)][random];
 
         	conv.close(`Today i suggest you to watch "${toPrint}".`);
         	
-   		} else if (category.length>=1 && genre.length===0){
-   			const randomDataLength = Math.floor((Math.random() * data[category][randomGenre].length));
-    		const randomMovieWG = data[category][randomGenre][randomDataLength];
+   		} else if (category.length==1 && genre.length==0){
+   			const randomDataLength = Math.floor((Math.random() * data[String(category)][randomGenre].length));
+    		const randomMovieWG = data[String(category)][randomGenre][randomDataLength];
 
     		conv.close(`I think you should watch "${randomMovieWG}" today.`);
-   		} else if (category.length===0 && genre.length>=1){
-   			const randomDataLength = Math.floor((Math.random() * data[randomCategory][genre].length));
-    		const randomMovieWC = data[randomCategory][genre][randomDataLength];
+   		} else if (category.length==0 && genre.length==1){
+   			const randomDataLength = Math.floor((Math.random() * data[randomCategory][String(genre)].length));
+    		const randomMovieWC = data[randomCategory][String(genre)][randomDataLength];
 
     		conv.close(`I think you should watch "${randomMovieWC}" today.`);
    		}
